@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 Codex Automation + Skills 打造晨報系統</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --paper: #fffdfa;
+      --ink: #152031;
+      --muted: #5f6a79;
+      --accent: #b45309;
+      --accent-2: #0f766e;
+      --line: #eadfce;
+      --hero: linear-gradient(135deg, #0f172a 0%, #1d4ed8 42%, #c65d18 100%);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: radial-gradient(circle at top, #fff7ec 0%, var(--bg) 38%, #eee3d1 100%);
+      color: var(--ink);
+      font-family: "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    body.presenter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deck {
+      position: relative;
+      width: min(1200px, 92vw);
+      height: min(760px, 88vh);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 28px 80px rgba(20, 24, 33, 0.18);
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 56px 62px;
+      display: none;
+      background: var(--paper);
+    }
+
+    .slide.active { display: block; }
+
+    .slide.hero {
+      background: var(--hero);
+      color: #f8fafc;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: 54px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      max-width: 920px;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 38px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      max-width: 920px;
+    }
+
+    p.lead {
+      margin: 0;
+      max-width: 860px;
+      font-size: 24px;
+      line-height: 1.55;
+      color: rgba(248,250,252,0.92);
+    }
+
+    .meta-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 860px;
+    }
+
+    .meta-card {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(248,250,252,0.72);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .meta-value {
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
+      height: 100%;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px 22px;
+      box-shadow: 0 10px 28px rgba(17, 24, 39, 0.05);
+    }
+
+    .card.soft {
+      background: linear-gradient(180deg, #fff9f3 0%, #fff 100%);
+    }
+
+    .section-label {
+      margin-bottom: 12px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .big-statement {
+      font-size: 34px;
+      line-height: 1.22;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 10px 0;
+      font-size: 22px;
+      line-height: 1.42;
+    }
+
+    .compact li { font-size: 19px; }
+
+    .small {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .tiny {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .flow-step {
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 0.55fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .screenshot-card {
+      padding: 14px;
+    }
+
+    .screenshot {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 36px rgba(17, 24, 39, 0.12);
+    }
+
+    .caption {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .code-block {
+      margin: 0;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #161b22;
+      color: #e6edf3;
+      font-family: "SF Mono", "Menlo", monospace;
+      font-size: 15px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .footer {
+      position: absolute;
+      left: 62px;
+      right: 62px;
+      bottom: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .slide.hero .footer {
+      color: rgba(248,250,252,0.72);
+    }
+
+    .progress {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 5px;
+      background: var(--accent);
+      transition: width .2s ease;
+    }
+
+    .help {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      font-size: 13px;
+      color: rgba(24,33,47,0.55);
+      z-index: 2;
+    }
+
+    .slide.hero .help {
+      color: rgba(255,255,255,0.72);
+    }
+
+    code {
+      background: #f6f1ea;
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-size: 0.92em;
+    }
+  </style>
+</head>
+<body class="presenter">
+  <div class="deck" id="deck">
+    <section class="slide hero active">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <div class="eyebrow">Codex Automation</div>
+      <h1>用 Codex Automation + Skills 打造晨報系統</h1>
+      <p class="lead">從排程執行開始，串起內容收集、briefing 生成、HTML 電子報渲染與寄送。重點不是做網站，而是把固定 workflow 包成可重複執行的 agent system。</p>
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-label">起點</div>
+          <div class="meta-value">Automation</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">案例</div>
+          <div class="meta-value">AI / Frontend 晨報</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">時間</div>
+          <div class="meta-value">10 到 15 分鐘</div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>vic.lo frontend sharing</span>
+        <span>1 / 12</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>什麼是 Codex Automation？</h2>
+      <div class="content">
+        <div class="stack">
+          <div class="card soft">
+            <div class="section-label">核心定義</div>
+            <div class="big-statement">把一段會做事的 prompt，變成固定會執行的 agent workflow。</div>
+          </div>
+          <div class="card">
+            <div class="section-label">你可以指定</div>
+            <ul class="compact">
+              <li>什麼時候跑</li>
+              <li>在哪個 workspace 跑</li>
+              <li>使用哪個 model</li>
+              <li>跑完輸出什麼</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">對工程流程的價值</div>
+            <ul class="compact">
+              <li>取代一次性 chat 操作</li>
+              <li>不只跑 script，還能帶 reasoning</li>
+              <li>適合 digest、triage、summary 類工作</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-label">官方來源與限制</div>
+            <div class="small">
+              官方文件：
+              <a href="https://developers.openai.com/codex/app/automations">developers.openai.com/codex/app/automations</a><br>
+              目前這個 automation 功能只有 Codex desktop app 能使用。
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>從 automation 出發看整個系統</span><span>2 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>Automation 有哪些功能？</h2>
+      <div class="content">
+        <div class="card soft">
+          <div class="section-label">核心功能</div>
+          <ul>
+            <li>定時執行 prompt</li>
+            <li>指定工作目錄與上下文</li>
+            <li>指定 model / reasoning effort</li>
+            <li>把 skill 當成工作流程入口</li>
+            <li>產出檔案、寄信、開 inbox item</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">在晨報系統裡</div>
+            <div class="small">automation 負責每天觸發，真正的內容生成與交付則交給 skill 和 script。</div>
+          </div>
+          <div class="card">
+            <div class="section-label">一句話理解</div>
+            <div class="small">automation 決定「什麼時候做」，skill 決定「怎麼做」。目前這套體驗是建在 Codex desktop app 上。</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>排程、工作目錄、模型與入口</span><span>3 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>晨報系統架構</h2>
+      <div class="stack" style="gap:18px;">
+        <div class="card soft">
+          <div class="section-label">系統流程</div>
+          <div class="flow">
+            <div class="flow-step">Codex automation</div>
+            <div class="arrow">→</div>
+            <div class="flow-step">brief skill</div>
+            <div class="arrow">→</div>
+            <div class="flow-step">render HTML</div>
+            <div class="arrow">→</div>
+            <div class="flow-step">send email</div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="section-label">Domain skills</div>
+            <ul class="compact">
+              <li><code>ai-engineer-brief</code></li>
+              <li><code>frontend-web-brief</code></li>
+              <li>各自帶 sources / ranking / wording</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-label">Helper skills / scripts</div>
+            <ul class="compact">
+              <li><code>brief-email-render</code></li>
+              <li><code>brief-email-send</code></li>
+              <li>最後只保留 HTML artifact</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-label">daily-news 結構</div>
+          <div class="small"><code>ai-brief/</code> 與 <code>frontend-web/</code> 分開保存電子報；<code>slide/</code> 放投影片與截圖。</div>
+        </div>
+      </div>
+      <div class="footer"><span>從 source 到 inbox 的完整鏈路</span><span>4 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>Skill 內容長什麼樣？</h2>
+      <div class="content">
+        <div class="stack">
+          <div class="card soft">
+            <div class="section-label">Brief skill 會定義</div>
+            <ul class="compact">
+              <li>追哪些來源</li>
+              <li>怎麼排序與去重</li>
+              <li>輸出結構與欄位</li>
+              <li>交付成 HTML 電子報</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-label">AI / Frontend 差異</div>
+            <div class="small">同樣都是晨報，但各自有不同 sources、優先主題、工程判準與語氣。</div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">Helper skill 會定義</div>
+            <ul class="compact">
+              <li>如何把 briefing 轉成 HTML</li>
+              <li>如何寄送 multipart email</li>
+              <li>SMTP 需要哪些 env vars</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-label">設計取向</div>
+            <div class="small">prompt 保持短，能力放進 skill；最後的 artifact 直接就是可預覽、可寄送的 HTML。</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>workflow 不是藏在 prompt，而是放在 skill</span><span>5 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>Skill 實際內容範例</h2>
+      <div class="content">
+        <div class="stack">
+          <div class="card soft">
+            <div class="section-label">以 `ai-engineer-brief` 為例</div>
+            <pre class="code-block">ai-engineer-brief/
+├── SKILL.md
+├── references/
+│   └── sources.md
+└── agents/
+    └── openai.yaml</pre>
+          </div>
+          <div class="card">
+            <div class="section-label">`SKILL.md` 裡面放什麼</div>
+            <ul class="compact">
+              <li>Defaults: 時間範圍、候選數量</li>
+              <li>Workflow: 收集、排序、去重、薄新聞處理</li>
+              <li>Output Format: Today / X Watch / One-Line Take / Worth Trying</li>
+              <li>Delivery: 產出 HTML、寄信、輸出限制</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">`sources.md` 裡面放什麼</div>
+            <ul class="compact">
+              <li>官方來源清單</li>
+              <li>追蹤的 X / Twitter 帳號</li>
+              <li>Watch keywords</li>
+              <li>Selection heuristics</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-label">`agents/openai.yaml` 的角色</div>
+            <div class="small">主要提供 UI 顯示名稱、簡短描述、預設 prompt，讓這個 skill 在實際使用時更容易被發現與呼叫。</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>把 skill 想成 prompt、references、UI metadata 的組合</span><span>6 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2><code>render_brief_email.py</code> 做什麼？</h2>
+      <div class="content">
+        <div class="card soft">
+          <div class="section-label">功能摘要</div>
+          <ul>
+            <li>讀入 briefing 結構</li>
+            <li>解析 <code>Today / X Watch / One-Line Take / Worth Trying</code></li>
+            <li>依標題自動切 AI / Frontend theme</li>
+            <li>輸出最後的 <code>*-email.html</code></li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">主流程</div>
+            <pre class="code-block">markdown_file
+  ↓
+split_sections()
+  ↓
+parse_cards() / parse_paragraphs()
+  ↓
+render_html()
+  ↓
+write *-email.html</pre>
+          </div>
+          <div class="card">
+            <div class="section-label">這支 script 的價值</div>
+            <div class="small">把 briefing 內容穩定轉成可直接閱讀、可直接寄送的 HTML 電子報，讓產出格式不需要每次都靠 prompt 臨場組裝。</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>把 briefing 轉成最終可看的 HTML</span><span>7 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2><code>send_gmail_html.py</code> 做什麼？</h2>
+      <div class="content">
+        <div class="card soft">
+          <div class="section-label">功能摘要</div>
+          <ul>
+            <li>讀取 HTML 檔</li>
+            <li>自動產生 plain-text fallback</li>
+            <li>用 SMTP 發 multipart email</li>
+            <li>支援 env vars 與互動式密碼</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">主要參數</div>
+            <pre class="code-block">--to-email
+--subject
+--html-file
+--from-email (optional)
+--plain-file (optional)</pre>
+          </div>
+          <div class="card">
+            <div class="section-label">主要環境變數</div>
+            <div class="small"><code>BRIEF_SMTP_FROM_EMAIL</code>、<code>BRIEF_SMTP_APP_PASSWORD</code>、<code>BRIEF_SMTP_HOST</code>、<code>BRIEF_SMTP_PORT</code></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>把同一份 HTML 直接寄出去</span><span>8 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>電子報實際長什麼樣？</h2>
+      <div class="stack" style="gap:18px;">
+        <div class="card soft">
+          <div class="section-label">實際收件畫面</div>
+          <div class="small">這兩張就是目前實際電子報截圖。左邊是桌機版，右邊是手機版。因為最後保存的是 HTML，所以本地直接打開看到的版型，跟真正寄出的內容幾乎一致。</div>
+        </div>
+        <div class="screenshot-grid">
+          <div class="card screenshot-card">
+            <img class="screenshot" src="./desktop-daily.png" alt="晨報桌機版截圖">
+            <div class="caption">桌機版：卡片資訊層級清楚，適合快速掃過今天最重要的更新。</div>
+          </div>
+          <div class="card screenshot-card">
+            <img class="screenshot" src="./mobile-daily.PNG" alt="晨報手機版截圖">
+            <div class="caption">手機版：寬度收斂後仍可閱讀，不需要另外維護 app 或 web UI。</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>HTML 就是 preview，也是 email 成品</span><span>9 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>Automation 的利與弊</h2>
+      <div class="two-col" style="height:100%;">
+        <div class="card soft">
+          <div class="section-label">優點</div>
+          <ul class="compact">
+            <li>不用做 UI / backend / database</li>
+            <li>排程、內容生成、寄信一次串起來</li>
+            <li>很適合 digest / triage / summary 類工作</li>
+            <li>維護成本比做完整產品低很多</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="section-label">限制</div>
+          <ul class="compact">
+            <li>不適合大量 end users 的正式產品</li>
+            <li>不適合複雜權限模型與穩定公開 API</li>
+            <li>對 prompt / skill 設計品質有依賴</li>
+            <li>仍需管控來源品質與寄信設定</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>這是 workflow automation，不是 SaaS replacement</span><span>10 / 12</span></div>
+
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>Claude、Cursor 也能做到類似的事</h2>
+      <div class="content">
+        <div class="card soft">
+          <div class="section-label">Claude Code</div>
+          <ul class="compact">
+            <li>有 Scheduled Tasks，可定時執行 Claude Code 工作</li>
+            <li>適合把固定時間會跑的 agent workflow 接到日常流程裡</li>
+            <li>模式上很接近這次晨報系統的自動化需求</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">Cursor</div>
+            <ul class="compact">
+              <li>目前是 Automations 搭配 Background Agent</li>
+              <li>可讓 agent 在雲端環境持續執行指定工作</li>
+              <li>比較像把 agent execution 與排程能力整合進產品裡</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-label">官方來源</div>
+            <div class="tiny">
+              Claude Code Scheduled Tasks:
+              <a href="https://code.claude.com/docs/en/scheduled-tasks">code.claude.com/docs/en/scheduled-tasks</a><br>
+              Cursor Automations:
+              <a href="https://cursor.com/docs/cloud-agent/automations">cursor.com/docs/cloud-agent/automations</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>類似模式在其他 agent coding 工具也已經成立</span><span>11 / 12</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="help">← → 切換投影片 / F 全螢幕</div>
+      <h2>Automation 還能延伸去哪？</h2>
+      <div class="content">
+        <div class="card soft">
+          <div class="section-label">同一個 pattern</div>
+          <ul>
+            <li>Daily PR review digest</li>
+            <li>Jira / Confluence 變更整理</li>
+            <li>定期 rebase PR branch</li>
+            <li>Codebase 掃描與升版建議</li>
+            <li>定期歸納與分析 Jenkins 失敗的 job，找出問題</li>
+            <li>每季定期撰寫 OKR</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="section-label">真正可複用的點</div>
+            <div class="small">只要需求長得像「固定時間、抓資料、按規則整理、輸出固定格式」，就很適合用同樣的 automation + skills pattern。</div>
+          </div>
+          <div class="card">
+            <div class="section-label">一句收尾</div>
+            <div class="big-statement" style="font-size:28px;">很多時候，我們不一定要先想到做 web app；automation + skills 已經夠解很多內部 workflow 題目。</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Q&amp;A</span><span>12 / 12</span></div>
+    </section>
+
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progress = document.getElementById('progress');
+    let index = 0;
+
+    function render() {
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+    }
+
+    function next() {
+      if (index < slides.length - 1) {
+        index += 1;
+        render();
+      }
+    }
+
+    function prev() {
+      if (index > 0) {
+        index -= 1;
+        render();
+      }
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') next();
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') prev();
+      if (event.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

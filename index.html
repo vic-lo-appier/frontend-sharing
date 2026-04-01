@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Sharing</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --paper: #fffdfa;
+      --ink: #152031;
+      --muted: #5f6a79;
+      --accent: #b45309;
+      --line: #eadfce;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #fff7ec 0%, var(--bg) 40%, #eee3d1 100%);
+      color: var(--ink);
+      font-family: "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 56px 20px 72px;
+    }
+
+    .hero {
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #fff3e6;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: 46px;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.7;
+    }
+
+    .list {
+      display: grid;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px 24px;
+      box-shadow: 0 12px 30px rgba(17, 24, 39, 0.05);
+    }
+
+    .date {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Frontend Sharing</div>
+      <h1>分享投影片</h1>
+      <p class="lead">集中整理每次分享的投影片網站。每場分享獨立一個資料夾，直接點進去就能看完整投影片。</p>
+    </section>
+
+    <section class="list">
+      <a class="card" href="./2026-04-01-codex-automation-daily-news/">
+        <div class="date">2026-04-01</div>
+        <div class="title">用 Codex Automation + Skills 打造晨報系統</div>
+        <div class="desc">從 Codex automation 出發，介紹晨報系統架構、skill 設計、HTML 電子報渲染與寄送流程，以及類似模式在其他工具上的對照。</div>
+      </a>
+    </section>
+  </main>
+</body>
+</html>
