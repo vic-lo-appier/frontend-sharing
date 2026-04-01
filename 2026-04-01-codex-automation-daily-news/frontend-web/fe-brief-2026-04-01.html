@@ -1,0 +1,168 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="color-scheme" content="light only"><title>前端 Web 晨報 2026-04-01</title>
+<style>
+body { margin:0; padding:0; background:radial-gradient(circle at top,#fff7ed 0%,#fff3ec 38%,#efe7db 100%); color:#111827; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.shell { max-width:860px; margin:0 auto; padding:24px 14px 40px; }
+.hero { background:linear-gradient(135deg, #1f2937 0%, #9a3412 55%, #ea580c 100%); color:#f8fafc; border-radius:32px; padding:30px 28px 26px; position:relative; overflow:hidden; box-shadow:0 24px 60px rgba(15,23,42,.18); }
+.hero::after { content:""; position:absolute; inset:auto -60px -80px auto; width:220px; height:220px; border-radius:999px; background:rgba(255,255,255,.08); filter:blur(2px); }
+.eyebrow { display:inline-block; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.12); color:#fed7aa; letter-spacing:.08em; text-transform:uppercase; font-size:11px; font-weight:800; margin-bottom:14px; }
+h1 { margin:0; font-size:38px; line-height:1.08; letter-spacing:-.03em; max-width:620px; }
+.hero-summary { margin-top:18px; max-width:700px; font-size:15px; line-height:1.8; color:rgba(248,250,252,.92); }
+.panel { margin-top:14px; background:#fffdfb; border:1px solid #f2d7c4; border-radius:28px; padding:24px 20px 30px; box-shadow:0 16px 34px rgba(15,23,42,.06); }
+.intro { margin:0 0 16px; font-size:15px; line-height:1.76; color:#334155; }
+.section-title { margin:28px 0 14px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#9a3412; }
+.news-card { background:#fff; border:1px solid #e8dfd2; border-radius:22px; padding:18px; margin:14px 0; box-shadow:0 10px 26px rgba(15,23,42,.05); }
+.card-topline { display:block; margin-bottom:10px; }
+.card-index { display:inline-block; margin-right:8px; padding:5px 9px; border-radius:999px; background:#fff7ed; border:1px solid #fed7aa; color:#9a3412; font-size:12px; font-weight:800; }
+.rating-pill { display:inline-block; padding:5px 9px; border-radius:999px; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; font-size:12px; font-weight:800; }
+.card-title { font-size:21px; line-height:1.34; font-weight:800; letter-spacing:-.02em; color:#111827; margin-bottom:12px; }
+.meta-row { margin-bottom:14px; }
+.meta-pill { display:inline-block; margin:0 8px 8px 0; padding:6px 10px; border-radius:999px; background:#f8fafc; border:1px solid #e2e8f0; color:#475569; font-size:12px; line-height:1.4; }
+.source-row { margin-bottom:14px; }
+.source-link a { display:inline-block; color:#0f766e; font-weight:800; text-decoration:underline; text-underline-offset:3px; }
+.source-link a::after { content:" ↗"; }
+.body-block { margin:12px 0; padding-top:12px; border-top:1px solid #f1f5f9; }
+.body-label { font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:#9a3412; font-weight:800; margin-bottom:6px; }
+.body-copy { font-size:14px; line-height:1.76; color:#334155; }
+.judgment { margin-top:14px; padding:14px; border-radius:16px; background:linear-gradient(180deg,#fff8f1 0%,#fffbf6 100%); border:1px solid #fde7cf; font-size:14px; line-height:1.7; color:#431407; }
+.judgment-label { display:inline-block; margin-right:8px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:800; color:#9a3412; }
+.take { border-radius:22px; padding:18px; background:linear-gradient(135deg,#fff7ed 0%,#ffffff 100%); border:1px solid #f4d9c0; box-shadow:inset 0 1px 0 rgba(255,255,255,.8); font-size:16px; line-height:1.8; color:#1f2937; }
+.watch-item { display:block; background:#fff; border:1px solid #ebe3d7; border-radius:18px; padding:14px 15px; margin:10px 0; box-shadow:0 8px 20px rgba(15,23,42,.04); }
+.watch-dot { display:inline-block; width:10px; height:10px; border-radius:999px; background:#fb923c; box-shadow:0 0 0 5px rgba(245,158,11,.12); margin-right:10px; vertical-align:top; margin-top:6px; }
+.watch-copy { display:inline-block; width:calc(100% - 28px); font-size:14px; line-height:1.72; color:#334155; }
+.watch-title { font-size:16px; font-weight:800; color:#111827; margin-bottom:4px; }
+.watch-meta { font-size:12px; color:#64748b; margin-bottom:8px; }
+.watch-judgment, .watch-source { margin-top:8px; }
+.watch-note { margin:0 0 12px; font-size:13px; line-height:1.7; color:#64748b; }
+.watch-empty { padding:16px; border-radius:18px; background:#fff; border:1px dashed #d7c8b8; color:#64748b; font-size:14px; }
+.worth-list { margin:0; padding-left:20px; }
+.worth-list li { margin:10px 0; font-size:15px; line-height:1.72; color:#334155; }
+a { color:#0f766e; text-decoration:none; }
+code { background:#f1f5f9; border-radius:6px; padding:2px 6px; font-size:13px; }
+</style></head><body>
+<div class="shell"><div class="hero"><div class="eyebrow">Frontend Brief</div><h1>前端 Web 晨報 2026-04-01</h1><div class="hero-summary">前端基礎設施正在同時往兩端加速：一端是跨平台與本機開發效率，另一端是更貼近真實應用的瀏覽器與語言基線，代表 2026 的技術選型會比過去更依賴實測而不是品牌敘事。</div></div>
+<div class="panel"><div class="section-title">Today</div>
+            <div class="news-card">
+              <div class="card-topline">
+                <div class="card-index">#1</div>
+                <div class="rating-pill">★★★★★</div>
+              </div>
+              <div class="card-title">JetStream 3 正式成為跨引擎 JavaScript / WebAssembly 新基準</div>
+              <div class="meta-row"><div class="meta-pill">2026-03-31</div></div>
+              <div class="source-row"><span class="source-link"><a href="https://webkit.org/blog/17899/introducing-the-jetstream-3-benchmark-suite/">WebKit Blog</a></span></div>
+              <div class="body-block"><div class="body-label">摘要</div><div class="body-copy">WebKit 與其他瀏覽器協作推出 JetStream 3，改以更貼近現代框架與應用型態的工作負載評估 JavaScript 與 WebAssembly 效能，明確取代舊版偏單點 microbenchmark 的訊號。</div></div>
+              <div class="body-block"><div class="body-label">Why it matters</div><div class="body-copy">效能回歸、執行時選型與瀏覽器比較，接下來更可能圍繞 JetStream 3 這類較貼近真實互動與框架成本的基準，而不是只看單一引擎跑分。</div></div>
+              <div class="judgment"><span class="judgment-label">Analyst</span><span>這不是立刻改碼的更新，但會直接影響你怎麼解讀「框架快慢」與瀏覽器效能宣稱，值得同步更新內部 benchmark 認知。</span></div>
+            </div>
+            
+            <div class="news-card">
+              <div class="card-topline">
+                <div class="card-index">#2</div>
+                <div class="rating-pill">★★★★★</div>
+              </div>
+              <div class="card-title">Next.js Across Platforms 把 Adapter API 從實驗推進到可落地階段</div>
+              <div class="meta-row"><div class="meta-pill">2026-03-25</div></div>
+              <div class="source-row"><span class="source-link"><a href="https://nextjs.org/blog/nextjs-across-platforms">Next.js Blog</a></span></div>
+              <div class="body-block"><div class="body-label">摘要</div><div class="body-copy">Next.js 團隊公布 Across Platforms 方向，重點是讓 Adapter API 持續成熟，降低不同部署平台之間的執行差異，並讓自訂執行環境整合更有系統。</div></div>
+              <div class="body-block"><div class="body-label">Why it matters</div><div class="body-copy">如果你的團隊有多雲、edge、自架或平台遷移需求，這會影響 Next.js 應用的可攜性與平台鎖定成本，不再只是 Vercel 單一路徑的議題。</div></div>
+              <div class="judgment"><span class="judgment-label">Analyst</span><span>這是架構層級的長期訊號，短期先觀察 adapter 生態與限制，長期會影響 Next.js 專案的部署決策。</span></div>
+            </div>
+            
+            <div class="news-card">
+              <div class="card-topline">
+                <div class="card-index">#3</div>
+                <div class="rating-pill">★★★★☆</div>
+              </div>
+              <div class="card-title">Safari 26.4 補進更多 CSS 與表單能力</div>
+              <div class="meta-row"><div class="meta-pill">2026-03-24</div></div>
+              <div class="source-row"><span class="source-link"><a href="https://webkit.org/blog/17873/news-from-wwdc25-webkit-in-safari-26-4/">WebKit Blog</a></span></div>
+              <div class="body-block"><div class="body-label">摘要</div><div class="body-copy">WebKit 整理 Safari 26.4 的新能力，涵蓋更多 CSS、表單控制與平台整合細節，持續縮小實作落差並改善現代 UI 功能可用性。</div></div>
+              <div class="body-block"><div class="body-label">Why it matters</div><div class="body-copy">Safari 長期是設計系統與互動元件的相容性瓶頸，這波更新會直接影響哪些樣式與元件可以少寫 fallback。</div></div>
+              <div class="judgment"><span class="judgment-label">Analyst</span><span>如果你的產品仍為 Safari 保留大量 workaround，現在值得重新盤點哪些 hack 可以退休。</span></div>
+            </div>
+            
+            <div class="news-card">
+              <div class="card-topline">
+                <div class="card-index">#4</div>
+                <div class="rating-pill">★★★★★</div>
+              </div>
+              <div class="card-title">TypeScript 6.0 正式版上線，預設追上新的 JavaScript 基線</div>
+              <div class="meta-row"><div class="meta-pill">2026-03-23</div></div>
+              <div class="source-row"><span class="source-link"><a href="https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/">TypeScript Blog</a></span></div>
+              <div class="body-block"><div class="body-label">摘要</div><div class="body-copy">TypeScript 6.0 正式發布，重點包含新的 <code>--target es2025</code>、<code>--lib es2025</code> 與對 <code>Temporal</code>、<code>Float16Array</code>、<code>Error.isError</code>、iterator helpers 等較新語言能力的型別支援。</div></div>
+              <div class="body-block"><div class="body-label">Why it matters</div><div class="body-copy">這會影響 monorepo 的 tsconfig 基線、polyfill 策略與 lint / build 相容矩陣，尤其是想更早採用新語言功能的團隊。</div></div>
+              <div class="judgment"><span class="judgment-label">Analyst</span><span>這是需要排進升級隊列的版本，不一定要今天升，但應先驗證工具鏈和 CI 是否已能跟上 6.0。</span></div>
+            </div>
+            
+            <div class="news-card">
+              <div class="card-topline">
+                <div class="card-index">#5</div>
+                <div class="rating-pill">★★★★★</div>
+              </div>
+              <div class="card-title">Next.js 16.2 把本機開發啟動速度再往前推</div>
+              <div class="meta-row"><div class="meta-pill">2026-03-18</div></div>
+              <div class="source-row"><span class="source-link"><a href="https://nextjs.org/blog/next-16-2">Next.js Blog</a></span></div>
+              <div class="body-block"><div class="body-label">摘要</div><div class="body-copy">Next.js 16.2 宣稱在大型應用的 <code>next dev --turbopack</code> 冷啟動可比舊版快到 400%，並持續補強 bundling、cache 與開發體驗。</div></div>
+              <div class="body-block"><div class="body-label">Why it matters</div><div class="body-copy">大型 repo 的啟動與熱更新延遲直接影響日常開發成本，這類改善如果能在你的專案重現，會是很實際的生產力回收。</div></div>
+              <div class="judgment"><span class="judgment-label">Analyst</span><span>值得拿一個真實大型專案做對照測試，不要只看官方數字，先驗證對你們的 package graph 與模組邊界是否同樣有效。</span></div>
+            </div>
+            
+            <div class="news-card">
+              <div class="card-topline">
+                <div class="card-index">#6</div>
+                <div class="rating-pill">★★★☆☆</div>
+              </div>
+              <div class="card-title">Firefox Beta 改用每分鐘 Remote Settings 拉取頻率</div>
+              <div class="meta-row"><div class="meta-pill">2026-03-25</div></div>
+              <div class="source-row"><span class="source-link"><a href="https://hacks.mozilla.org/2026/03/faster-remote-settings-rollout-in-firefox-beta/">Mozilla Hacks</a></span></div>
+              <div class="body-block"><div class="body-label">摘要</div><div class="body-copy">Mozilla 宣布 Firefox Beta 的 Remote Settings 從每日改為每分鐘輪詢，讓瀏覽器設定、實驗旗標與緊急修正能更快進入 beta 使用者。</div></div>
+              <div class="body-block"><div class="body-label">Why it matters</div><div class="body-copy">對依賴瀏覽器實驗功能、相容性驗證與 beta 測試流程的團隊來說，功能狀態與風險會比以往更快變動。</div></div>
+              <div class="judgment"><span class="judgment-label">Analyst</span><span>這不是使用者可見功能更新，但它提高了 beta 通道作為前線驗證環境的實用性，測試節奏需要跟著調整。</span></div>
+            </div>
+            <div class="section-title">X Watch</div><div class='watch-note'>X 檢索今天可取得的直接狀態頁不完整，因此這裡優先納入可由搜尋片段或交叉來源驗證的 5 則貼文訊號，連結盡量指回對應作者的 X 頁面；可用性足夠做趨勢判讀，但不建議把這一段單獨當成唯一事實來源。</div><div class='watch-item'>
+<div class='watch-dot'></div>
+<div class='watch-copy'>
+  <div class='watch-title'>Next.js 16.2 發布貼文持續放大 Turbopack 本機啟動提升</div>
+  <div class='watch-meta'>★★★★☆ 2026-03-18</div>
+  <div>官方貼文重點放在大型專案 <code>next dev --turbopack</code> 冷啟動可顯著加速，社群回應也集中在大型 monorepo 的實測差異。</div>
+  <div class='watch-judgment'><strong>分析：</strong>如果你們正在評估是否把 dev server 主路徑切到 Turbopack，這類發布貼文是很好的試驗切入點，但仍要用真實專案驗證。</div>
+  <div class='watch-source'><strong>來源：</strong><a href="https://x.com/nextjs">Next.js on X</a></div>
+</div>
+</div><div class='watch-item'>
+<div class='watch-dot'></div>
+<div class='watch-copy'>
+  <div class='watch-title'>Vite 8 發布貼文把 Rolldown 與效能訊號一起推上檯面</div>
+  <div class='watch-meta'>★★★★☆ 2026-03-12</div>
+  <div>Vite 官方貼文將 8.0 的焦點放在預設能力、升級路徑與 Rolldown 帶來的後續想像空間，討論集中在大型專案建置與 plugin 相容性。</div>
+  <div class='watch-judgment'><strong>分析：</strong>這不是只有版本號更新，對 bundler 生態的後續遷移判斷也很重要，值得追後續 plugin 實測。</div>
+  <div class='watch-source'><strong>來源：</strong><a href="https://x.com/vite_js">Vite on X</a></div>
+</div>
+</div><div class='watch-item'>
+<div class='watch-dot'></div>
+<div class='watch-copy'>
+  <div class='watch-title'>Hayden Bleasel 分享 Vercel AI SDK 開源 Chat SDK 的產品化訊號</div>
+  <div class='watch-meta'>★★★☆☆ 2026-02-24</div>
+  <div>貼文把 Chat SDK 的開源定位講得很清楚，重點是把常見聊天產品互動抽成可直接落地的前端骨架，而不是只提供底層 SDK。</div>
+  <div class='watch-judgment'><strong>分析：</strong>雖然日期較早，但對正在做 AI 介面前端的團隊仍有參考價值，尤其是元件邊界與狀態流設計。</div>
+  <div class='watch-source'><strong>來源：</strong><a href="https://x.com/haydenbleasel">Hayden Bleasel on X</a></div>
+</div>
+</div><div class='watch-item'>
+<div class='watch-dot'></div>
+<div class='watch-copy'>
+  <div class='watch-title'>社群開始把 Vinxi / Vite-native Next 類方案視為 2026 觀察點</div>
+  <div class='watch-meta'>★★★☆☆ 2026-03-25</div>
+  <div>近期貼文討論把 Next.js 式開發體驗搬到更偏 Vite-native 的堆疊，關注點在於 SSR、RSC 相容層與開發效能的折衷。</div>
+  <div class='watch-judgment'><strong>分析：</strong>現在還偏早期訊號，但如果你們對框架成本敏感，這類貼文值得放進技術雷達而非立即採用。</div>
+  <div class='watch-source'><strong>來源：</strong><a href="https://x.com/kristianfreeman">Kristian Freeman on X</a></div>
+</div>
+</div><div class='watch-item'>
+<div class='watch-dot'></div>
+<div class='watch-copy'>
+  <div class='watch-title'>Addy Osmani 關注生成式工具直接產出可動畫 SVG 的工作流</div>
+  <div class='watch-meta'>★★★☆☆ 2026-02-19</div>
+  <div>貼文討論 Gemini 2.0 直接生成可動畫 SVG 的可能性，讓設計稿到可嵌入前端資產的鏈路更短，也引出可維護性與品質控管問題。</div>
+  <div class='watch-judgment'><strong>分析：</strong>這條線索短期更像 prototyping 加速器，不適合直接進入核心產品資產流程，但很值得前端和設計一起試。</div>
+  <div class='watch-source'><strong>來源：</strong><a href="https://x.com/addyosmani">Addy Osmani on X</a></div>
+</div>
+</div><div class="section-title">One-Line Take</div><div class="take"><p>前端基礎設施正在同時往兩端加速：一端是跨平台與本機開發效率，另一端是更貼近真實應用的瀏覽器與語言基線，代表 2026 的技術選型會比過去更依賴實測而不是品牌敘事。</p></div><div class="section-title">Worth Trying</div><ul class="worth-list"><li>用一個真實大型 repo 同時量測 Next.js 16.1 與 16.2 的 <code>next dev --turbopack</code> 冷啟動與首輪 HMR。</li><li>建一個 TypeScript 6.0 升級分支，只驗證 <code>target/lib</code> 變更、CI、eslint 與測試工具是否有連鎖問題。</li><li>把 Safari 26.4 新增能力對照你們現有的 design system fallback 清單，找出可以移除的 workaround。</li></ul></div></div>
+</body></html>
